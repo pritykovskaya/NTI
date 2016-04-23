@@ -47,12 +47,9 @@ def dot2(i):
     Xr = scipy.sparse.csr_matrix((Xdata, Xindices, Xindptr), shape=Xshape)
 
     Wr = read_sparse_matrix(os.path.join(graph_path, part_path))
-    mtx = Wr.dot(Xr)
-    numpy.savez(os.path.join(graph_path, "mult_" + part_path), data=mtx.data,
-                indices=mtx.indices,
-                indptr=mtx.indptr,
-                shape=mtx.shape)
 
+    print "Before mult"
+    return Wr.dot(Xr)
 
 
 def getMatmat(X):
@@ -64,7 +61,9 @@ def getMatmat(X):
     pool = multiprocessing.Pool(processes=multiprocessing.cpu_count(), initializer=initProcess,
                                 initargs=(XData, XIndices, XIndptr, X.shape))
     params = range(16)
-    pool.map(dot2, params)
+    print params
+
+    results = pool.map(dot2, params)
 
 
 
